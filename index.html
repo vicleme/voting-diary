@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diário de votos</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-weight:600;font-style:normal;font-display:swap;src:url("vendor/fonts/bricolage-grotesque-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-weight:800;font-style:normal;font-display:swap;src:url("vendor/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2")}
+@font-face{font-family:"Public Sans";font-weight:400;font-style:normal;font-display:swap;src:url("vendor/fonts/public-sans-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Public Sans";font-weight:600;font-style:normal;font-display:swap;src:url("vendor/fonts/public-sans-latin-600-normal.woff2") format("woff2")}
+</style>
+<style>
+:root{--bg:#eef1f4;--fg:#162033;--mut:#5d6779;--card:#fff;--bd:#d5dbe3;--ac:#1f7a4d;--acf:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151f;--fg:#e8ecf2;--mut:#98a2b3;--card:#192130;--bd:#2c3649;--ac:#4cc58a;--acf:#0b1a12}}
+:root[data-theme="dark"]{--bg:#10151f;--fg:#e8ecf2;--mut:#98a2b3;--card:#192130;--bd:#2c3649;--ac:#4cc58a;--acf:#0b1a12}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 "Public Sans",system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 60px}
+h1,h2,h3{font-family:"Bricolage Grotesque","Trebuchet MS",sans-serif;margin:0}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{flex:none;border-radius:11px}
+h1{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.2rem;margin:24px 0 4px}
+.sub{color:var(--mut);margin:2px 0 12px;font-size:.9rem}
+nav{display:flex;gap:6px;margin:14px 0 8px;flex-wrap:wrap}
+button,select,input{font:inherit;color:inherit}
+nav button,.btn{border:1px solid var(--bd);background:var(--card);padding:7px 14px;border-radius:8px;cursor:pointer}
+nav button.on,.btn.pri{background:var(--ac);color:var(--acf);border-color:var(--ac);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin:10px 0}
+.rep{--fg:#162033;--mut:#5d6779;--bd:#d5dbe3;--ac:#1f7a4d;--card:#fff;background:#fff;color:#162033;border:1px solid var(--bd);border-radius:10px;padding:22px}
+.rep .card{margin:8px 0}
+.row{display:flex;align-items:center;gap:10px;margin:7px 0}
+.row .yl{width:44px;font-weight:600;flex:none}
+.row .n{width:96px;flex:none;color:var(--mut);font-size:.85rem;text-align:right}
+.bar{flex:1;display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--bd)}
+.bar i{display:block;height:100%}
+.leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.82rem;color:var(--mut);margin-top:8px}
+.leg b{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.spec{position:relative;height:26px;border-radius:13px;margin:34px 6px 8px;background:linear-gradient(90deg,#c93c3c,#e48b5e,#9aa1ab,#6b9bd1,#2c5aa0)}
+.spec .pin{position:absolute;top:-14px;width:4px;height:54px;background:var(--fg);border-radius:2px;margin-left:-2px}
+.spec .pin span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;font-weight:600;font-size:.85rem}
+.ends{display:flex;justify-content:space-between;color:var(--mut);font-size:.8rem;margin:0 6px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+td.c,th.c{text-align:center}
+.chip{display:inline-block;border:1px solid var(--bd);border-radius:6px;padding:1px 7px;margin:1px 3px 1px 0;font-size:.8rem;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label{display:block;font-size:.82rem;color:var(--mut)}
+input,select{width:100%;padding:7px 9px;border:1px solid var(--bd);border-radius:7px;background:var(--bg)}
+textarea{width:100%;min-height:120px;font:12px/1.4 ui-monospace,Consolas,monospace;background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:7px;padding:8px}
+.x{border:0;background:none;color:var(--mut);cursor:pointer;padding:2px 6px}
+.note{color:var(--mut);font-size:.82rem}
+.opt{display:flex;gap:8px;align-items:center;margin:6px 0}.opt input{width:auto}
+.ok{color:#1f7a4d;font-weight:600}.no{color:#c93c3c;font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<div class="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="logo" width="44" height="44" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1f7a4d"/><rect x="16" y="12" width="34" height="42" rx="4" fill="#ffffff"/><path d="M19 12h4v42h-4a3 3 0 0 1-3-3V15a3 3 0 0 1 3-3z" fill="#162033"/><path d="M42 12h6v12l-3-2.5L42 24z" fill="#e48b5e"/><path d="M27 35l5 5 9-10" fill="none" stroke="#1f7a4d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg><h1>Diário de votos</h1></div>
+<p class="sub">Registre seus votos, veja quem venceu e descubra o que eles dizem sobre você. Os dados ficam só no seu navegador.</p>
+<nav id="nav"></nav>
+<div id="view"></div>
+</main>
+<script src="vendor/html2canvas.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script>
+const OR=['esquerda','centro-esquerda','centro','centro-direita','direita'];
+const SC=[-2,-1,0,1,2], COL=['#c93c3c','#e48b5e','#9aa1ab','#6b9bd1','#2c5aa0'];
+const OFF=['Presidente','Governador','Senador','Deputado Federal','Deputado Estadual','Deputado Distrital','Prefeito','Vereador'];
+const SINGLE=['Presidente','Governador','Prefeito'];
+const RACAS=[['branca','Branca','#a7b4c6'],['preta','Preta','#2b2b33'],['parda','Parda','#b8741a'],['amarela','Amarela','#e0c040'],['indigena','Indígena','#1f9a6a']];
+const isNegra=v=>v.raca==='preta'||v.raca==='parda'||(!v.raca&&v.negra===true);
+const isInd=v=>v.raca==='indigena';
+const PARTY0={PT:0,PSOL:0,PCB:0,PSTU:0,UP:0,PCDOB:0,REDE:1,PSB:1,PDT:1,PV:1,PSDB:2,MDB:2,PSD:2,PODE:2,CIDADANIA:2,AVANTE:2,UNIÃO:3,NOVO:4,PL:4,PP:4,REPUBLICANOS:4,PRD:4,DC:4,PSL:4};
+const BUILT_PRES=[[1989,'Fernando Collor','PRN'],[1994,'Fernando Henrique Cardoso','PSDB'],[1998,'Fernando Henrique Cardoso','PSDB'],[2002,'Luiz Inácio Lula da Silva','PT'],[2006,'Luiz Inácio Lula da Silva','PT'],[2010,'Dilma Rousseff','PT'],[2014,'Dilma Rousseff','PT'],[2018,'Jair Bolsonaro','PSL'],[2022,'Luiz Inácio Lula da Silva','PT']].map(r=>({ano:r[0],cargo:'Presidente',local:'Brasil',nome:r[1],partido:r[2],built:1}));
+// Complete lists of winners (full:true): anyone not listed counts as not elected.
+const BUILT_SP=[[2018,'Governador','SP','João Doria','PSDB'],[2022,'Governador','SP','Tarcísio de Freitas','REPUBLICANOS'],[2026,'Governador','SP','Tarcísio de Freitas','REPUBLICANOS'],[2018,'Senador','SP','Mara Gabrilli','PSDB'],[2018,'Senador','SP','Major Olímpio','PSL'],[2022,'Senador','SP','Marcos Pontes','PL'],[2026,'Senador','SP','Guilherme Derrite','PP'],[2026,'Senador','SP','André do Prado','PL'],[2020,'Prefeito','Mongaguá','Márcio Cabeça (Márcio Melo Gomes)','REPUBLICANOS'],[2024,'Prefeito','Mongaguá','Paulo Wiazowski Filho (registro indeferido)','PP'],[2025,'Prefeito','Mongaguá','Cristina Wiazowski (eleição suplementar)','PP']].map(r=>({ano:r[0],cargo:r[1],local:r[2],nome:r[3],partido:r[4],full:true,built:1}));
+const BUILT=BUILT_PRES.concat(BUILT_SP);
+const KEY='diario_votos_v1';
+let S=load(), tab='painel', incl2=true, editId=null, editW=null, editA=null;
+
+function blank(){return{nome:'',votes:[],winners:[],absences:[],parties:{...PARTY0}}}
+function load(){try{const j=localStorage.getItem(KEY);if(j){const o=JSON.parse(j);if(o&&Array.isArray(o.votes))return fix(o)}}catch(e){}return blank()}
+function fix(o){return{nome:o.nome||'',votes:(o.votes||[]).map(v=>({...v,raca:v.raca||''})),winners:o.winners||[],parties:{...PARTY0,...(o.parties||{})},absences:(o.absences||[]).map((a,i)=>({...a,id:a.id||i+1}))}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+const same=(a,b)=>{a=norm(a);b=norm(b);return a.length>2&&b.length>2&&(a.includes(b)||b.includes(a))};
+const pk=p=>String(p||'').toUpperCase();
+const ori=v=>{const p=S.parties[pk(v.partido)];return p===undefined||p===''||p===null?null:Number(p)};
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const used=()=>S.votes.filter(v=>incl2||v.turno==1);
+const years=()=>[...new Set(used().map(v=>v.ano))].sort();
+const allW=()=>BUILT.concat(S.winners.filter(w=>!BUILT.some(b=>b.ano==w.ano&&norm(b.cargo)==norm(w.cargo)&&norm(b.local)==norm(w.local)&&same(b.nome,w.nome))));
+function res(v){
+  if(v.res==='sim')return{ok:true,w:[]};if(v.res==='nao')return{ok:false,w:[]};
+  const W=allW().filter(w=>w.ano==v.ano&&norm(w.cargo)==norm(v.cargo)&&(v.cargo==='Presidente'||(norm(w.local)&&norm(w.local)==norm(v.local))));
+  if(!W.length)return null;
+  if(W.some(w=>same(w.nome,v.nome)))return{ok:true,w:W};
+  return (SINGLE.includes(v.cargo)||W.some(w=>w.full))?{ok:false,w:W}:null;
+}
+function stack(parts){return '<div class="bar">'+parts.filter(p=>p.n).map(p=>`<i style="width:${p.n}%;background:${p.c}" title="${esc(p.l)}"></i>`).join('')+'</div>'}
+function st(parts){const t=parts.reduce((a,p)=>a+p.n,0)||1;return stack(parts.map(p=>({...p,n:p.n/t*100,l:p.l+': '+p.n})))}
+function leg(items){return '<div class="leg">'+items.map(i=>`<span><b style="background:${i.c}"></b>${esc(i.l)}</span>`).join('')+'</div>'}
+
+function reportHTML(){
+  const U=used(), Y=years();
+  const avg=a=>{const x=a.map(ori).filter(z=>z!==null).map(o=>SC[o]);return x.length?x.reduce((p,q)=>p+q,0)/x.length:null};
+  const all=avg(U);
+  let h=`<h1>Meus votos${S.nome?': '+esc(S.nome):''}</h1><p class="sub">${U.length} votos entre ${Y[0]} e ${Y[Y.length-1]} · gerado em ${new Date().toLocaleDateString('pt-BR')}${incl2?'':' · só 1º turno'}</p>`;
+  h+='<h2>Onde estou no espectro</h2><div class="card">';
+  if(all===null)h+='Defina a orientação dos partidos na aba Partidos.';
+  else{
+    h+=`<div class="spec"><div class="pin" style="left:${(all+2)/4*100}%"><span>${all.toFixed(2)} · ${OR[Math.round(all+2)]}</span></div></div><div class="ends"><span>esquerda</span><span>centro</span><span>direita</span></div>`;
+    const pts=Y.map(y=>[y,avg(U.filter(v=>v.ano==y))]).filter(p=>p[1]!==null);
+    const W=640,H=150,x=i=>pts.length>1?40+i*(W-80)/(pts.length-1):W/2,y=m=>20+(2-m)/4*(H-40);
+    h+=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Posição média por ano">`;
+    OR.forEach((o,i)=>{h+=`<line x1="30" x2="${W-20}" y1="${y(SC[i])}" y2="${y(SC[i])}" stroke="#d5dbe3" stroke-dasharray="${i==2?'':'3 4'}"/><text x="2" y="${y(SC[i])+4}" font-size="9" fill="#5d6779">${SC[i]>0?'+':''}${SC[i]}</text>`});
+    h+=`<polyline fill="none" stroke="#162033" stroke-width="1.5" points="${pts.map((p,i)=>x(i)+','+y(p[1])).join(' ')}"/>`;
+    pts.forEach((p,i)=>{h+=`<circle cx="${x(i)}" cy="${y(p[1])}" r="6" fill="${COL[Math.round(p[1]+2)]}" stroke="#162033"/><text x="${x(i)}" y="${H-3}" text-anchor="middle" font-size="11" fill="#5d6779">${p[0]}</text><text x="${x(i)}" y="${y(p[1])-11}" text-anchor="middle" font-size="10" fill="#162033">${p[1].toFixed(1)}</text>`});
+    h+='</svg><p class="note">Baseado só na orientação atribuída a cada partido; não mede o perfil de cada candidato.</p>';
+  }
+  h+='</div><h2>Orientação dos partidos por ano</h2><div class="card">';
+  Y.forEach(y=>{const V=U.filter(v=>v.ano==y);const parts=OR.map((o,i)=>({l:o,c:COL[i],n:V.filter(v=>ori(v)===i).length}));const un=V.filter(v=>ori(v)===null).length;
+    h+=`<div class="row"><span class="yl">${y}</span>${st(parts.concat(un?[{l:'sem classificação',c:'#d5dbe3',n:un}]:[]))}<span class="n">${V.length} votos</span></div>`});
+  h+=leg(OR.map((o,i)=>({l:o,c:COL[i]})))+'</div><h2>Votos em mulheres</h2><div class="card">';
+  Y.forEach(y=>{const V=U.filter(v=>v.ano==y),f=V.filter(v=>v.gen==='F').length;
+    h+=`<div class="row"><span class="yl">${y}</span>${st([{l:'mulheres',c:'#1f7a4d',n:f},{l:'outros',c:'#d5dbe3',n:V.length-f}])}<span class="n">${pct(f,V.length)}% · ${f}/${V.length}</span></div>`});
+  const F=U.filter(v=>v.gen==='F').length;
+  h+=`<p class="note">No total, ${pct(F,U.length)}% dos votos foram em mulheres (${F} de ${U.length}).</p></div>`;
+  h+=grp('Votos em pessoas LGBT',v=>v.lgbt,'#8a4fbf','pessoas LGBT')+grp('Votos em pessoas negras',isNegra,'#b8741a','pessoas negras (pretas e pardas)')+grp('Votos em pessoas indígenas',isInd,'#1f9a6a','pessoas indígenas')+racaBlock();
+  const P={};U.forEach(v=>{const k=pk(v.partido);(P[k]=P[k]||{})[v.ano]=(P[k][v.ano]||0)+1});
+  const pl=Object.keys(P).sort((a,b)=>Object.values(P[b]).reduce((p,q)=>p+q,0)-Object.values(P[a]).reduce((p,q)=>p+q,0));
+  h+='<h2>Partidos ao longo dos anos</h2><div class="card scroll"><table><tr><th>Partido</th>'+Y.map(y=>`<th class="c">${y}</th>`).join('')+'<th class="c">Total</th></tr>';
+  pl.forEach(p=>{const t=Object.values(P[p]).reduce((a,b)=>a+b,0);const o=ori({partido:p});
+    h+=`<tr><td><b style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:${o===null?'#d5dbe3':COL[o]}"></b>${esc(p)}</td>`+Y.map(y=>{const n=P[p][y]||0;return `<td class="c" style="${n?`background:rgba(31,122,77,${Math.min(.12+n*.12,.7)})`:'color:#5d6779'}">${n||'·'}</td>`}).join('')+`<td class="c"><b>${t}</b></td></tr>`});
+  h+='</table></div>';
+  const G={};U.forEach(v=>{const k=norm(v.nome);(G[k]=G[k]||{nome:v.nome,v:[]}).v.push(v)});
+  const R=Object.values(G).filter(g=>g.v.length>1).sort((a,b)=>b.v.length-a.v.length);
+  h+='<h2>Quem recebeu mais de um voto meu</h2><div class="card">';
+  if(!R.length)h+='Ninguém repetiu até agora.';
+  R.forEach(g=>{const ys=[...new Set(g.v.map(v=>v.ano))].sort();const ps=[...new Set(g.v.map(v=>pk(v.partido)))];
+    h+=`<div style="padding:8px 0;border-bottom:1px solid #d5dbe3"><b>${esc(g.nome)}</b>: ${g.v.length} votos em ${ys.length} ${ys.length>1?'eleições':'eleição'}${ps.length>1?` <span class="note">(partidos: ${ps.map(esc).join(' → ')})</span>`:''}<div>${[...g.v].sort((a,b)=>a.ano-b.ano||a.turno-b.turno).map(v=>`<span class="chip">${v.ano} · ${esc(v.cargo)} · ${v.turno}º turno</span>`).join('')}</div></div>`});
+  h+='</div>';
+  // resultados
+  const rs=U.map(v=>({v,r:res(v)})).filter(x=>x.r);
+  h+='<h2>Meus votos e quem venceu</h2><div class="card">';
+  if(!rs.length)h+='<span class="note">Sem resultados ainda. Cadastre vencedores na aba Eleições ou marque “eleito?” ao registrar o voto.</span>';
+  else{
+    Y.forEach(y=>{const V=U.filter(v=>v.ano==y);const k=V.map(res);const a=k.filter(r=>r&&r.ok).length,b=k.filter(r=>r&&!r.ok).length,c=V.length-a-b;
+      h+=`<div class="row"><span class="yl">${y}</span>${st([{l:'eleitos',c:'#1f7a4d',n:a},{l:'não eleitos',c:'#c93c3c',n:b},{l:'sem dado',c:'#d5dbe3',n:c}])}<span class="n">${a} de ${a+b}</span></div>`});
+    h+=leg([{l:'eleito(a)',c:'#1f7a4d'},{l:'não eleito(a)',c:'#c93c3c'},{l:'sem dado',c:'#d5dbe3'}]);
+    const ok=rs.filter(x=>x.r.ok).length;
+    h+=`<p class="note">Dos ${rs.length} votos com resultado conhecido, ${ok} (${pct(ok,rs.length)}%) foram em quem ganhou.</p><div class="scroll"><table><tr><th>Eleição</th><th>Meu voto</th><th>Vencedor(a)</th><th></th></tr>`;
+    [...rs].sort((a,b)=>a.v.ano-b.v.ano||OFF.indexOf(a.v.cargo)-OFF.indexOf(b.v.cargo)).forEach(({v,r})=>{
+      h+=`<tr><td>${v.ano} · ${esc(v.cargo)}${v.local&&v.cargo!=='Presidente'?' · '+esc(v.local):''}</td><td>${esc(v.nome)}</td><td>${r.w.length?r.w.map(w=>esc(w.nome)+(w.partido?' ('+esc(pk(w.partido))+')':'')).join(', '):'marcado por você'}</td><td class="${r.ok?'ok':'no'}">${r.ok?'eleito(a)':'não eleito(a)'}</td></tr>`});
+    h+='</table></div>';
+  }
+  h+='</div>';
+  return h+absHTML();
+}
+
+function racaBlock(){const U=used(),Y=years();let h='<h2>Cor/raça declarada</h2><div class="card">';
+  const LEG={l:'negra, a confirmar (preta ou parda)',c:'#8a6a3a'},NA={l:'sem informação',c:'#d5dbe3'};
+  Y.forEach(y=>{const V=U.filter(v=>v.ano==y);
+    const parts=RACAS.map(r=>({l:r[1],c:r[2],n:V.filter(v=>v.raca===r[0]).length}));
+    parts.push({...LEG,n:V.filter(v=>!v.raca&&v.negra===true).length});
+    parts.push({...NA,n:V.filter(v=>!v.raca&&v.negra!==true).length});
+    h+=`<div class="row"><span class="yl">${y}</span>${st(parts)}<span class="n">${V.length} votos</span></div>`});
+  const known=U.filter(v=>v.raca).length;
+  h+=leg(RACAS.map(r=>({l:r[1],c:r[2]})).concat([LEG,NA]))+`<p class="note">Cor/raça registrada em ${known} de ${U.length} votos. Os demais aparecem como sem informação ou a confirmar.</p></div>`;
+  return h}
+function grp(title,fn,c,lbl){const U=used(),Y=years();let h=`<h2>${title}</h2><div class="card">`;
+  Y.forEach(y=>{const V=U.filter(v=>v.ano==y),f=V.filter(fn).length;h+=`<div class="row"><span class="yl">${y}</span>${st([{l:lbl,c:c,n:f},{l:'outros',c:'#d5dbe3',n:V.length-f}])}<span class="n">${pct(f,V.length)}% · ${f}/${V.length}</span></div>`});
+  const F=U.filter(fn).length;return h+`<p class="note">No total, ${pct(F,U.length)}% dos votos foram em ${lbl} (${F} de ${U.length}).</p></div>`}
+
+function painel(){
+  if(!S.votes.length)return `<div class="card"><h3>Comece por aqui</h3><p>Ainda não há votos. Vá em <b>Votos</b> e registre o primeiro, ou em <b>Exportar e importar</b> para carregar um arquivo .json de uma sessão anterior.</p><p class="note">Você registra ano, turno, cargo, candidato, partido e gênero. O painel mostra o espectro político, votos em mulheres, partidos por ano, repetições e quem venceu.</p></div>`;
+  return `<label class="opt"><input type="checkbox" id="i2" ${incl2?'checked':''}> Contar também os votos de 2º turno</label><div class="rep" id="rep">${reportHTML()}</div>`;
+}
+
+function votos(){
+  const e=S.votes.find(v=>v.id===editId)||{ano:new Date().getFullYear(),turno:1,cargo:'Presidente',local:'',num:'',nome:'',partido:'',gen:'M',res:'',lgbt:false,negra:false,raca:''};
+  const sel=(id,arr,val)=>`<select id="${id}">${arr.map(a=>`<option ${a==val?'selected':''}>${a}</option>`).join('')}</select>`;
+  let h=`<div class="card"><h3>${editId?'Editar voto':'Novo voto'}</h3><div class="grid" style="margin-top:10px">
+  <div><label>Ano<input id="f_ano" type="number" value="${e.ano}"></label></div>
+  <div><label>Turno${sel('f_turno',[1,2],e.turno)}</label></div>
+  <div><label>Cargo${sel('f_cargo',OFF,e.cargo)}</label></div>
+  <div><label>Local (UF ou cidade)<input id="f_local" value="${esc(e.local)}" placeholder="vazio para Presidente"></label></div>
+  <div><label>Número<input id="f_num" value="${esc(e.num)}"></label></div>
+  <div><label>Nome<input id="f_nome" list="dn" value="${esc(e.nome)}"></label></div>
+  <div><label>Partido<input id="f_partido" list="dp" value="${esc(e.partido)}"></label></div>
+  <div><label>Gênero<select id="f_gen"><option value="F" ${e.gen=='F'?'selected':''}>Mulher</option><option value="M" ${e.gen=='M'?'selected':''}>Homem</option><option value="O" ${e.gen=='O'?'selected':''}>Outro</option></select></label></div>
+  <div><label>Foi eleito(a)?<select id="f_res"><option value="">Automático / não sei</option><option value="sim" ${e.res=='sim'?'selected':''}>Sim</option><option value="nao" ${e.res=='nao'?'selected':''}>Não</option></select></label></div>
+  <div><label>Pessoa LGBT?<select id="f_lgbt"><option value="0">Não / não sei</option><option value="1" ${e.lgbt?'selected':''}>Sim</option></select></label></div>
+  <div><label>Cor/raça (autodeclaração ao TSE)<select id="f_raca"><option value="">${!e.raca&&e.negra?'A confirmar (antes marcada como negra)':'Não sei'}</option>${RACAS.map(r=>`<option value="${r[0]}" ${e.raca==r[0]?'selected':''}>${r[1]}</option>`).join('')}</select></label></div>
+  </div><datalist id="dn">${[...new Set(S.votes.map(v=>v.nome))].map(n=>`<option value="${esc(n)}">`).join('')}</datalist><datalist id="dp">${Object.keys(S.parties).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+  <p class="note">Gênero, orientação e cor/raça: marque conforme a autodeclaração pública da pessoa. Para cor/raça, a fonte é o registro de candidatura no TSE (DivulgaCandContas). Se não souber, deixe “Não sei”.</p><p><button class="btn pri" id="save">${editId?'Salvar alterações':'Adicionar voto'}</button> ${editId?'<button class="btn" id="cancel">Cancelar</button>':''}</p><p class="note" id="msg"></p></div>`;
+  h+=ausencias();
+  [...new Set(S.votes.map(v=>v.ano))].sort((a,b)=>b-a).forEach(y=>{
+    h+=`<h2>${y}</h2><div class="card scroll"><table>`+S.votes.filter(v=>v.ano==y).sort((a,b)=>a.turno-b.turno||OFF.indexOf(a.cargo)-OFF.indexOf(b.cargo)).map(v=>{const r=res(v);return `<tr><td>${v.turno}º</td><td>${esc(v.cargo)}</td><td>${esc(v.nome)} <span class="note">${esc(v.num)}</span></td><td>${esc(pk(v.partido))}</td><td class="${r?(r.ok?'ok':'no'):'note'}">${r?(r.ok?'eleito(a)':'não eleito(a)'):'sem dado'}</td><td style="text-align:right;white-space:nowrap"><button class="x" data-e="${v.id}">editar</button><button class="x" data-d="${v.id}">excluir</button></td></tr>`}).join('')+'</table></div>'});
+  return h;
+}
+
+const absTxt=j=>j==='sim'?'justificada':j==='nao'?'não justificada':'justificativa pendente';
+const absCls=j=>j==='sim'?'ok':j==='nao'?'no':'note';
+function absHTML(){
+  const A=S.absences.filter(a=>incl2||a.turno==1).sort((a,b)=>a.ano-b.ano||a.turno-b.turno);
+  if(!A.length)return '';
+  return '<h2>Eleições em que não votei</h2><div class="card"><div class="scroll"><table><tr><th>Eleição</th><th>Local</th><th></th></tr>'+A.map(a=>`<tr><td>${a.ano} · ${a.turno}º turno${a.desc?' · '+esc(a.desc):''}</td><td>${esc(a.local)}</td><td class="${absCls(a.just)}">${absTxt(a.just)}</td></tr>`).join('')+'</table></div><p class="note">Ausências não entram nas contas de votos acima.</p></div>';
+}
+function ausencias(){
+  const e=S.absences.find(a=>a.id===editA)||{ano:new Date().getFullYear(),turno:1,local:'',desc:'',just:'sim'};
+  let h=`<h2>Ausências</h2><div class="card"><h3>${editA?'Editar ausência':'Nova ausência'}</h3><p class="note" style="margin-top:4px">Para eleições em que você não votou. Elas aparecem no relatório, mas não entram nas contas de votos.</p><div class="grid" style="margin-top:10px">
+  <div><label>Ano<input id="a_ano" type="number" value="${e.ano}"></label></div>
+  <div><label>Turno<select id="a_turno"><option value="1" ${e.turno==1?'selected':''}>1</option><option value="2" ${e.turno==2?'selected':''}>2</option></select></label></div>
+  <div><label>Local (UF ou cidade)<input id="a_local" value="${esc(e.local)}"></label></div>
+  <div><label>Descrição<input id="a_desc" value="${esc(e.desc)}" placeholder="ex.: Eleição suplementar para prefeito"></label></div>
+  <div><label>Justificou a ausência?<select id="a_just"><option value="sim" ${e.just=='sim'?'selected':''}>Sim</option><option value="pendente" ${e.just=='pendente'?'selected':''}>Ainda não</option><option value="nao" ${e.just=='nao'?'selected':''}>Não justificou</option></select></label></div></div>
+  <p><button class="btn pri" id="asave">${editA?'Salvar alterações':'Adicionar ausência'}</button> ${editA?'<button class="btn" id="acancel">Cancelar</button>':''}</p><p class="note" id="msgA"></p>`;
+  if(S.absences.length)h+='<table>'+[...S.absences].sort((a,b)=>b.ano-a.ano||b.turno-a.turno).map(a=>`<tr><td>${a.ano}</td><td>${a.turno}º</td><td>${esc(a.local)}${a.desc?' · '+esc(a.desc):''}</td><td class="${absCls(a.just)}">${absTxt(a.just)}</td><td style="text-align:right;white-space:nowrap"><button class="x" data-ae="${a.id}">editar</button><button class="x" data-ad="${a.id}">excluir</button></td></tr>`).join('')+'</table>';
+  return h+'</div>';
+}
+
+function eleicoes(){
+  const e=S.winners.find(w=>w.id===editW)||{ano:new Date().getFullYear(),cargo:'Governador',local:'',nome:'',partido:''};
+  let h=`<p class="sub">Cadastre quem venceu cada eleição para o painel comparar com seus votos. Já estão incluídos os resultados de Presidente (1989 a 2022), Governador e Senador por SP (2018 a 2026) e Prefeito de Mongaguá (2020 a 2025). Para os demais cargos e locais, cadastre os eleitos em quem você votou (ou use “Foi eleito(a)?” no voto). Marque “Lista completa de eleitos” quando cadastrar todos os eleitos daquele cargo e local: quem não estiver na lista conta como não eleito.</p>
+  <div class="card"><h3>${editW?'Editar vencedor(a)':'Novo vencedor(a)'}</h3><div class="grid" style="margin-top:10px">
+  <div><label>Ano<input id="w_ano" type="number" value="${e.ano}"></label></div>
+  <div><label>Cargo<select id="w_cargo">${OFF.map(a=>`<option ${a==e.cargo?'selected':''}>${a}</option>`).join('')}</select></label></div>
+  <div><label>Local (UF ou cidade)<input id="w_local" value="${esc(e.local)}"></label></div>
+  <div><label>Nome<input id="w_nome" value="${esc(e.nome)}"></label></div>
+  <div><label>Partido<input id="w_partido" list="dp" value="${esc(e.partido)}"></label></div>
+  <div><label class="opt" style="margin-top:22px"><input type="checkbox" id="w_full" ${e.full?'checked':''}> Lista completa de eleitos</label></div></div>
+  <datalist id="dp">${Object.keys(S.parties).map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+  <p><button class="btn pri" id="wsave">${editW?'Salvar alterações':'Adicionar'}</button> ${editW?'<button class="btn" id="wcancel">Cancelar</button>':''}</p><p class="note" id="msg"></p></div>`;
+  h+='<h2>Seus cadastros</h2><div class="card scroll">'+(S.winners.length?'<table>'+[...S.winners].sort((a,b)=>b.ano-a.ano).map(w=>`<tr><td>${w.ano}</td><td>${esc(w.cargo)}${w.local?' · '+esc(w.local):''}</td><td>${esc(w.nome)} ${w.partido?'('+esc(pk(w.partido))+')':''}</td><td style="text-align:right;white-space:nowrap"><button class="x" data-we="${w.id}">editar</button><button class="x" data-wd="${w.id}">excluir</button></td></tr>`).join('')+'</table>':'<span class="note">Nada cadastrado ainda.</span>')+'</div>';
+  h+='<h2>Resultados já incluídos</h2><div class="card scroll"><table>'+[...BUILT].sort((a,b)=>b.ano-a.ano||OFF.indexOf(a.cargo)-OFF.indexOf(b.cargo)).map(w=>`<tr><td>${w.ano}</td><td>${esc(w.cargo)}${w.local&&w.local!=='Brasil'?' · '+esc(w.local):''}</td><td>${esc(w.nome)}</td><td>${esc(w.partido)}</td></tr>`).join('')+'</table></div>';
+  return h;
+}
+
+function partidos(){
+  const ps=[...new Set([...Object.keys(S.parties),...S.votes.map(v=>pk(v.partido))])].filter(Boolean).sort();
+  return `<p class="sub">A orientação de cada partido alimenta o espectro e as estatísticas. Ajuste como achar mais justo.</p><div class="card"><table>`+ps.map(p=>{const v=S.parties[p];return `<tr><td><b>${esc(p)}</b></td><td><select data-p="${esc(p)}"><option value="">sem classificação</option>${OR.map((o,i)=>`<option value="${i}" ${v!==undefined&&v!==''&&Number(v)===i?'selected':''}>${o}</option>`).join('')}</select></td></tr>`}).join('')+'</table></div>';
+}
+
+function exportar(){
+  return `<div class="card"><h3>Exportar relatório e dados</h3><label style="margin-top:10px">Seu nome no relatório (opcional)<input id="nome" value="${esc(S.nome)}"></label>
+  <p><button class="btn pri" data-x="pdf">Baixar relatório PDF</button> <button class="btn pri" data-x="png">Baixar relatório PNG</button> <button class="btn" data-x="json">Baixar dados .json</button></p><p class="note" id="msg"></p></div>
+  <div class="card"><h3>Importar dados</h3><p class="note">Tem um arquivo .json salvo antes? Escolha o arquivo ou cole o conteúdo abaixo. Isso substitui os dados atuais.</p>
+  <input type="file" id="file" accept=".json,application/json"><textarea id="bk" placeholder="Ou cole o JSON aqui"></textarea><p><button class="btn" id="imp">Importar</button> <button class="btn" id="clr">Apagar tudo</button></p><p class="note" id="msg2"></p></div>`;
+}
+
+function render(){
+  document.getElementById('nav').innerHTML=[['painel','Painel'],['votos','Votos'],['eleicoes','Eleições'],['partidos','Partidos'],['exportar','Exportar e importar']].map(t=>`<button data-t="${t[0]}" class="${tab==t[0]?'on':''}">${t[1]}</button>`).join('');
+  document.getElementById('view').innerHTML={painel,votos,eleicoes,partidos,exportar}[tab]();
+  bind();
+}
+
+function saveFile(name,data,msg){
+  try{
+    const blob=data instanceof Blob?data:new Blob([data],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    msg('Arquivo pronto.');
+  }catch(e){msg('Não foi possível salvar: '+(e&&e.message||e))}
+}
+async function shot(){
+  const box=document.createElement('div');box.style.cssText='position:fixed;left:-9999px;top:0;width:820px';
+  box.innerHTML=`<div class="rep" style="border:0">${reportHTML()}</div>`;document.body.appendChild(box);
+  try{return await html2canvas(box.firstChild,{scale:2,backgroundColor:'#ffffff'})}finally{box.remove()}
+}
+async function doExport(kind){
+  const $=id=>document.getElementById(id), say=t=>{$('msg').textContent=t};
+  if(kind==='json'){return saveFile('meus-votos.json',JSON.stringify({app:'diario-de-votos',versao:3,...S},null,1),say)}
+  if(!S.votes.length){say('Registre ao menos um voto antes.');return}
+  if(!window.html2canvas){say('Biblioteca de imagem não carregou. Tente novamente.');return}
+  say('Gerando…');
+  try{const cv=await shot();
+    if(kind==='png'){const b=await new Promise(r=>cv.toBlob(r,'image/png'));return saveFile('relatorio-votos.png',b,say)}
+    const {jsPDF}=window.jspdf;const w=cv.width/2,h=cv.height/2;
+    const pdf=new jsPDF({orientation:w>h?'l':'p',unit:'px',format:[w,h]});
+    pdf.addImage(cv.toDataURL('image/jpeg',.92),'JPEG',0,0,w,h);
+    return saveFile('relatorio-votos.pdf',pdf.output('blob'),say);
+  }catch(e){say('Erro ao gerar: '+(e&&e.message||e))}
+}
+function importText(t){
+  const say=m=>{const el=document.getElementById('msg2');if(el)el.textContent=m};
+  let o;
+  try{o=JSON.parse(String(t).replace(/^\uFEFF/,'').trim())}catch(e){say('Não consegui ler o arquivo como JSON ('+(e&&e.message||e)+'). Confira se ele não foi editado ou cortado.');return}
+  if(Array.isArray(o))o={votes:o};
+  if(!o||!Array.isArray(o.votes)){say('O arquivo não tem a lista "votes". Use um .json exportado por este app.');return}
+  try{S=fix(o);S.votes.forEach((v,i)=>{if(!v.id)v.id=i+1});S.winners.forEach((w,i)=>{if(!w.id)w.id=i+1});save();render();say('Dados importados: '+S.votes.length+' votos.')}
+  catch(e){say('Erro ao importar: '+(e&&e.message||e))}
+}
+
+function bind(){
+  const $=id=>document.getElementById(id), nid=a=>Math.max(0,...a.map(x=>x.id||0))+1;
+  document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tab=b.dataset.t;editId=null;editW=null;editA=null;render()});
+  if($('i2'))$('i2').onchange=e=>{incl2=e.target.checked;render()};
+  document.querySelectorAll('[data-p]').forEach(s=>s.onchange=()=>{S.parties[s.dataset.p]=s.value;save()});
+  document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{if(confirm('Excluir este voto?')){S.votes=S.votes.filter(v=>v.id!=b.dataset.d);save();render()}});
+  document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{editId=+b.dataset.e;render();scrollTo(0,0)});
+  document.querySelectorAll('[data-wd]').forEach(b=>b.onclick=()=>{if(confirm('Excluir este cadastro?')){S.winners=S.winners.filter(w=>w.id!=b.dataset.wd);save();render()}});
+  document.querySelectorAll('[data-we]').forEach(b=>b.onclick=()=>{editW=+b.dataset.we;render();scrollTo(0,0)});
+  document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>doExport(b.dataset.x));
+  if($('nome'))$('nome').oninput=e=>{S.nome=e.target.value;save()};
+  if($('cancel'))$('cancel').onclick=()=>{editId=null;render()};
+  if($('wcancel'))$('wcancel').onclick=()=>{editW=null;render()};
+  if($('save'))$('save').onclick=()=>{
+    const o={ano:+$('f_ano').value,turno:+$('f_turno').value,cargo:$('f_cargo').value,local:$('f_local').value.trim(),num:$('f_num').value.trim(),nome:$('f_nome').value.trim(),partido:pk($('f_partido').value.trim()),gen:$('f_gen').value,res:$('f_res').value,lgbt:$('f_lgbt').value==='1',raca:$('f_raca').value};
+    const old=editId?S.votes.find(v=>v.id===editId):null;
+    o.negra=o.raca?(o.raca==='preta'||o.raca==='parda'):!!(old&&!old.raca&&old.negra);
+    if(!o.ano||!o.nome||!o.partido){$('msg').textContent='Preencha ano, nome e partido.';return}
+    if(S.parties[o.partido]===undefined)S.parties[o.partido]='';
+    if(editId){Object.assign(S.votes.find(v=>v.id===editId),o);editId=null}else S.votes.push({id:nid(S.votes),...o});
+    save();render();
+  };
+  if($('wsave'))$('wsave').onclick=()=>{
+    const o={ano:+$('w_ano').value,cargo:$('w_cargo').value,local:$('w_local').value.trim(),nome:$('w_nome').value.trim(),partido:pk($('w_partido').value.trim()),full:$('w_full').checked};
+    if(!o.ano||!o.nome){$('msg').textContent='Preencha ano e nome.';return}
+    if(o.partido&&S.parties[o.partido]===undefined)S.parties[o.partido]='';
+    if(editW){Object.assign(S.winners.find(w=>w.id===editW),o);editW=null}else S.winners.push({id:nid(S.winners),...o});
+    save();render();
+  };
+  document.querySelectorAll('[data-ad]').forEach(b=>b.onclick=()=>{if(confirm('Excluir esta ausência?')){S.absences=S.absences.filter(a=>a.id!=b.dataset.ad);save();render()}});
+  document.querySelectorAll('[data-ae]').forEach(b=>b.onclick=()=>{editA=+b.dataset.ae;render();const el=$('a_ano');if(el)el.scrollIntoView({block:'center'})});
+  if($('acancel'))$('acancel').onclick=()=>{editA=null;render()};
+  if($('asave'))$('asave').onclick=()=>{
+    const o={ano:+$('a_ano').value,turno:+$('a_turno').value,local:$('a_local').value.trim(),desc:$('a_desc').value.trim(),just:$('a_just').value};
+    if(!o.ano||!o.local){$('msgA').textContent='Preencha ano e local.';return}
+    if(editA){Object.assign(S.absences.find(a=>a.id===editA),o);editA=null}else S.absences.push({id:nid(S.absences),...o});
+    save();render();
+  };
+  if($('imp'))$('imp').onclick=()=>importText($('bk').value);
+  if($('file'))$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>importText(r.result);r.onerror=()=>{const el=$('msg2');if(el)el.textContent='Não foi possível ler o arquivo.'};r.readAsText(f);e.target.value=''};
+  if($('clr'))$('clr').onclick=()=>{if(confirm('Apagar todos os votos e cadastros deste navegador? Baixe o .json antes se quiser guardar.')){S=blank();save();render()}};
+}
+render();
+</script>
+</body>
+</html>
